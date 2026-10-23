@@ -20,14 +20,11 @@ class Simulation:
         print()     
     @classmethod
     def next_turn(cls):
-        os.system("cls")
-        for ex in Herbivore.obj_collection:
+        for ex in (list(filter(lambda x: isinstance(x, Herbivore), Map.collection.values()))):
             ex.make_move()
-        for ex in Predator.obj_collection:
+        for ex in (list(filter(lambda x: isinstance(x, Predator), Map.collection.values()))):
             ex.make_move()   
         Simulation.turns_count += 1
-        Simulation.render()
-        time.sleep(2)
     @classmethod
     def continue_simulation(cls):
         Simulation.simulating = True
@@ -36,4 +33,4 @@ class Simulation:
         Simulation.simulating = False
         print('Симуляция приостановлена')
 Simulation.init_actions = [MakeMap, MakeDefaultWorld]
-Simulation.turn_actions = [Simulation.render, Simulation.next_turn, CheckEcoSystem.activate]
+Simulation.turn_actions = [Simulation.next_turn, CheckEcoSystem.activate, Simulation.render]

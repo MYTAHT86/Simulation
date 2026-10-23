@@ -1,30 +1,22 @@
-import random
-from wcwidth import wcswidth
-import os 
 import time
+import os 
 import msvcrt
-random.seed(67)
-from entity.entity import Entity
-from static_objects.static_objects import Rock, Tree
-from grass.grass import Grass
-from creatures.creature import Creature
-from creatures.herbivore import Herbivore
-from creatures.predator import Predator
-from map.map import Map
-from makers.makemap import MakeMap   
-from makers.makemapobjects import MakeMapObjects
-from makers.makedefaultworld import MakeDefaultWorld
-from checkecosystem.checkecosystem import CheckEcoSystem
+
 from simulation.simulation import Simulation
 
 if __name__ == "__main__":
     print("Добро пожаловать в симуляцию животного мира. В ходе симуляции вы можете остановить процесс, нажав на Пробел")
+    os.system("cls")
     for action in Simulation.init_actions:
         action()
-    while Simulation.break_status == False:
+    Simulation.render()
+    time.sleep(2)
+    while not Simulation.break_status:
         if Simulation.simulating:
+            os.system("cls")
             for action in Simulation.turn_actions:
                 action()
+        time.sleep(2)
         if msvcrt.kbhit():
             user_input = msvcrt.getch()
             if user_input == b'p':
