@@ -1,9 +1,10 @@
 from map.map import Map
+from entity.entity import Entity
 
 
 class BFS:
     @staticmethod
-    def search(instance, classname_to_find):
+    def search(instance: Entity, classname_to_find: type[Entity]) -> tuple[tuple[int, int] | None, list[tuple[tuple[int, int], tuple[int, int]]], tuple[int, int]]:
         current_slot = Map.find_current_slot(instance)
         destination = None
         queue = [current_slot]
@@ -26,8 +27,8 @@ class BFS:
 
     
     @staticmethod
-    def path_search(instance, step_variations, eating_slot):
+    def path_search(instance: Entity, step_variations: list[tuple[tuple[int, int], tuple[int, int]]], eating_slot: tuple[int, int]) -> list[tuple[int, int]]:
         path = [eating_slot]
         while path[-1] != Map.find_current_slot(instance):
-            path.append(next((step[0] for step in step_variations if step[1] == path[-1]), None))
+            path.append(next((step[0] for step in step_variations if step[1] == path[-1])))
         return path

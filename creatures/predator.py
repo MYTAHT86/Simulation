@@ -5,15 +5,15 @@ from bfs.bfs import BFS
 
 
 class Predator(Creature):
-    def __init__(self, name, speed=1, hp=4, damage=2):
+    def __init__(self, name: str, speed: int = 1, hp: int = 4, damage: int = 2) -> None:
         super().__init__(name, speed, hp)
         self.damage = damage
         self.predator = '🐺'
         self.hunger = 0
         self.full_status = False
     
-    def make_move(self):
-        def hunger_process(self):
+    def make_move(self) -> None:
+        def hunger_process(self) -> None:
             if not self.full_status:    
                 if self.hunger == 3:
                     self.hp -= 1
@@ -26,7 +26,7 @@ class Predator(Creature):
                 Map.delete_instance_on_visual_map(location)
             self.full_status = False
         nearest_herbivore, step_variations, attacking_slot = BFS.search(self, Herbivore)
-        if nearest_herbivore == None:
+        if nearest_herbivore is None:
             hunger_process(self)
             return
         current_location = Map.find_current_slot(self)
@@ -36,7 +36,7 @@ class Predator(Creature):
             Map.predator_move_on_map(self, current_location, step_to_make)
             hunger_process(self)
         else:
-            def attack(current_location, nearest_herbivore):
+            def attack(current_location: tuple[int, int], nearest_herbivore: tuple[int, int]) -> None:
                 herbivore = Map.find_instance_from_collection(nearest_herbivore)
                 herbivore.lose_hp(self)
                 if not Map.check_location(nearest_herbivore):

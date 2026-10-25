@@ -26,4 +26,4 @@ if __name__ == "__main__":
             elif user_input == b'e':
                 Simulation.break_status = True
     print("Симуляция закончена")
-    print("До скорых встреч ребятки")
+    
