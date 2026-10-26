@@ -41,3 +41,4 @@ class Herbivore(Creature):
             location = Map.find_current_slot(self)  
             Map.delete_on_map(location)
             Map.add_free_slot(location)
+            Map.delete_instance_on_visual_map(location)
