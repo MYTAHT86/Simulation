@@ -2,10 +2,11 @@ from .creature import Creature
 from .herbivore import Herbivore
 from map.map import Map
 from bfs.bfs import BFS
+from config import PREDATOR_HP, PREDATOR_SPEED, PREDATOR_DAMAGE
 
 
 class Predator(Creature):
-    def __init__(self, name: str, speed: int = 1, hp: int = 4, damage: int = 2) -> None:
+    def __init__(self, name: str, speed: int = PREDATOR_SPEED, hp: int = PREDATOR_HP, damage: int = PREDATOR_DAMAGE) -> None:
         super().__init__(name, speed, hp)
         self.damage = damage
         self.predator = '🐺'

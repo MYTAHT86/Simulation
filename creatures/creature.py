@@ -1,5 +1,4 @@
 from entity.entity import Entity
-from map.map import Map
 
 
 class Creature(Entity):

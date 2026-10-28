@@ -3,21 +3,23 @@ from map.map import Map
 from grass.grass import Grass
 from bfs.bfs import BFS
 from typing import TYPE_CHECKING
+from config import HERBIVORE_HP, HERBIVORE_SPEED
 
 if TYPE_CHECKING:
     from .predator import Predator
 
 
 class Herbivore(Creature):
-    def __init__(self, name: str, speed: int = 2, hp: int = 4) -> None:
+    def __init__(self, name: str, speed: int = HERBIVORE_SPEED, hp: int = HERBIVORE_HP) -> None:
         super().__init__(name, speed, hp)
         self.herbivore = '🐰'
         self.eating_status = False
+        self.nearest_grass = None
       
     def make_move(self) -> None:
         if self.eating_status:
             Map.herbivore_eat_on_map(self)
-            del self.nearest_grass
+            self.nearest_grass = None
             self.eating_status = False
         else:
             nearest_grass, step_variations, eating_slot = BFS.search(self, Grass)
@@ -36,7 +38,7 @@ class Herbivore(Creature):
     def lose_hp(self, instance: "Predator") -> None:
         self.hp -= instance.damage
         if self.hp <= 0:
-            if self.eating_status:
+            if self.eating_status and self.nearest_grass is not None:
                 Map.change_instance_on_map_to_nearest_grass(self, self.nearest_grass[1])
             location = Map.find_current_slot(self)  
             Map.delete_on_map(location)

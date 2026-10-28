@@ -1,5 +1,6 @@
 import random
 from typing import TYPE_CHECKING
+from config import MAP_SIZE_HORIZONTAL, MAP_SIZE_VERTICAL
 
 from entity.entity import Entity
 
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class Map:
-    free_slots = [(vertical, horizontal) for vertical in range(16) for horizontal in range(16)]
+    free_slots = [(vertical, horizontal) for vertical in range(MAP_SIZE_VERTICAL) for horizontal in range(MAP_SIZE_HORIZONTAL)]
     collection: dict[tuple[int, int], Entity | None] = {}
     number_counter_for_instance_names = 0
     
@@ -40,15 +41,17 @@ class Map:
     
     @classmethod
     def delete_on_map(cls, current_location: tuple[int, int], step_to_make: tuple[int, int] | None = None) -> None:
-        if step_to_make:
+        if current_location in Map.collection:
+            if step_to_make is not None:
+                Map.free_slots.remove(step_to_make)
             del Map.collection[current_location]
-            Map.free_slots.remove(step_to_make)
-        else:
-            del Map.collection[current_location]
-    
     @classmethod
     def find_current_slot(cls, instance: Entity) -> tuple[int, int]:
-        return next(k for k, v in Map.collection.items() if v == instance)
+        location = next((k for k, v in Map.collection.items() if v == instance), None)
+        if location is not None:
+            return location
+        else:
+            raise ValueError("Данного объекта нет на карте")
     
     @classmethod
     def slot_check_for_destination(cls, current_slot: tuple[int, int], vertical: int, horizontal: int, classname: type[Entity]) -> bool:
@@ -56,7 +59,7 @@ class Map:
     
     @classmethod
     def is_slot_free(cls, current_slot: tuple[int, int], vertical: int, horizontal: int) -> bool:
-        return (current_slot[0] + vertical, current_slot[1]  + horizontal) not in Map.collection.keys()
+        return (current_slot[0] + vertical, current_slot[1]  + horizontal) not in Map.collection
     
     @classmethod
     def find_instance_from_collection(cls, location: tuple[int, int]) -> Entity | None:
@@ -72,7 +75,7 @@ class Map:
     
     @classmethod
     def check_location(cls, location: tuple[int, int]) -> bool:
-        return location in Map.collection.keys()
+        return location in Map.collection
     
     @classmethod
     def add_free_slot(cls, location: tuple[int, int]) -> None:

@@ -1,5 +1,6 @@
 from map.map import Map
 from entity.entity import Entity
+from config import MAP_SIZE_HORIZONTAL, MAP_SIZE_VERTICAL
 
 
 class BFS:
@@ -8,14 +9,15 @@ class BFS:
         current_slot = Map.find_current_slot(instance)
         destination = None
         queue = [current_slot]
+        queue_index = 0
         step_options = []
-        while not destination and queue:
-            current_slot = queue.pop(0) 
+        while not destination and queue_index != len(queue):
+            current_slot = queue[queue_index]
             for vertical in range(-1, 2):
                 if destination:
                     break
                 for horizontal in range(-1, 2):
-                    if (0 <= current_slot[0] + vertical <= 15 and 0 <= current_slot[1]  + horizontal <= 15) and ((vertical == 0) != (horizontal == 0)):
+                    if (0 <= current_slot[0] + vertical < MAP_SIZE_VERTICAL and 0 <= current_slot[1]  + horizontal < MAP_SIZE_HORIZONTAL) and ((vertical == 0) != (horizontal == 0)):
                         if Map.slot_check_for_destination(current_slot, vertical, horizontal, classname_to_find):
                             destination = (current_slot[0] + vertical, current_slot[1]  + horizontal)
                             break
@@ -23,6 +25,7 @@ class BFS:
                         if Map.is_slot_free(current_slot, vertical, horizontal) and not any(step[1] == new_slot for step in step_options):   
                             queue.append((current_slot[0] + vertical, current_slot[1]  + horizontal))  
                             step_options.append((current_slot, (current_slot[0] + vertical, current_slot[1]  + horizontal)))
+            queue_index += 1
         return destination, step_options, current_slot
 
     

@@ -1,7 +1,3 @@
-import os 
-import time
-import msvcrt
-
 from wcwidth import wcswidth
 
 from map.map import Map
